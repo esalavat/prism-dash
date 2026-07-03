@@ -1,0 +1,14 @@
+# dependencies / build tooling (only needed to wrap the native apps)
+node_modules/
+package-lock.json
+
+# Capacitor native projects (generated locally when you build the apps)
+/ios/
+/android/
+.gradle/
+DerivedData/
+
+# misc
+.DS_Store
+*.log
+dist/

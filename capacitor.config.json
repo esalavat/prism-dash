@@ -1,0 +1,12 @@
+{
+  "appId": "com.esalavat.prismdash",
+  "appName": "Prism Dash",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always"
+  },
+  "backgroundColor": "#07071aff"
+}

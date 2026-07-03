@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#07071a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="description" content="PRISM DASH — a neon low-poly endless runner. Dodge, jump, and dash through an infinite glowing canyon." />
+<title>PRISM DASH</title>
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="./assets/icon.svg" />
+<link rel="stylesheet" href="./styles.css" />
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/": "./vendor/three/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- In-game HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="hud-score">
+        <span id="scoreVal">0</span>
+        <small>SCORE</small>
+      </div>
+      <div class="hud-shards">
+        <span class="gem">◈</span><span id="shardVal">0</span>
+      </div>
+      <button id="pauseBtn" class="icon-btn" aria-label="Pause">❚❚</button>
+    </div>
+    <div class="hud-boost">
+      <div id="boostFill"></div>
+      <span class="boost-label">DASH</span>
+    </div>
+  </div>
+
+  <!-- Title / main menu -->
+  <div id="menu" class="overlay">
+    <div class="brand">
+      <h1>PRISM<span>DASH</span></h1>
+      <p class="tagline">Ride the neon canyon.</p>
+    </div>
+    <div class="menu-best">BEST <b id="menuBest">0</b></div>
+    <div class="menu-actions">
+      <button id="playBtn" class="btn btn-primary">PLAY</button>
+      <div class="menu-row">
+        <button id="shopBtn" class="btn btn-ghost">SHOP</button>
+        <button id="soundBtn" class="btn btn-ghost" aria-label="Sound">🔊</button>
+      </div>
+    </div>
+    <p class="hint">Swipe to switch lanes · Tap or swipe up to jump</p>
+  </div>
+
+  <!-- Game over -->
+  <div id="gameover" class="overlay hidden">
+    <h2>RUN OVER</h2>
+    <div class="go-stats">
+      <div><span id="goScore">0</span><small>SCORE</small></div>
+      <div><span id="goBest">0</span><small>BEST</small></div>
+      <div><span id="goShards">0</span><small>◈ SHARDS</small></div>
+    </div>
+    <div id="newBest" class="new-best hidden">★ NEW BEST ★</div>
+    <div class="menu-actions">
+      <button id="reviveBtn" class="btn btn-revive">REVIVE ▶ watch ad</button>
+      <button id="againBtn" class="btn btn-primary">PLAY AGAIN</button>
+      <div class="menu-row">
+        <button id="goShopBtn" class="btn btn-ghost">SHOP</button>
+        <button id="goMenuBtn" class="btn btn-ghost">MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pause -->
+  <div id="pause" class="overlay hidden">
+    <h2>PAUSED</h2>
+    <div class="menu-actions">
+      <button id="resumeBtn" class="btn btn-primary">RESUME</button>
+      <button id="quitBtn" class="btn btn-ghost">QUIT TO MENU</button>
+    </div>
+  </div>
+
+  <!-- Shop -->
+  <div id="shop" class="overlay hidden">
+    <div class="shop-head">
+      <h2>CRYSTAL SHOP</h2>
+      <button id="shopClose" class="icon-btn" aria-label="Close">✕</button>
+    </div>
+    <div id="skinGrid" class="skin-grid"></div>
+    <button id="removeAdsBtn" class="btn btn-ghost wide">REMOVE ADS</button>
+    <p class="shop-note" id="shopNote">Purchases unlock in the iOS / Android app.</p>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script type="module" src="./src/game.js"></script>
+</body>
+</html>
