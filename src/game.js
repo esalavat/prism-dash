@@ -254,33 +254,36 @@ function releaseAll() {
 let distSinceRow = 0;
 
 function spawnRow(distance) {
-  const diff = Math.min(1, distance / 1400);       // 0..1 difficulty ramp
+  const diff = Math.min(1, distance / 2000);         // 0..1 difficulty ramp
   const r = Math.random();
 
-  if (r < 0.16) {
-    // breather: shard line in a random lane
+  const breather = 0.34 - diff * 0.22;               // many empty rows early -> few late
+  const hurdleW = 0.14 + diff * 0.06;                // jump hurdles
+  const doubleW = Math.max(0, diff - 0.25) * 0.5;    // double barriers only appear later
+
+  if (r < breather) {
+    // breather: shard line in a random lane (no obstacle)
     const lane = rand3();
     for (let i = 0; i < 3; i++) spawnShard(lane, 1.0, -i * 2.2);
     return;
   }
-  if (r < 0.30 + diff * 0.18) {
+  if (r < breather + hurdleW) {
     // jump hurdle across the whole track (+ shard arc to reward jumping)
     spawn('hurdle', null);
     for (let i = -1; i <= 1; i++) spawnShard(rand3(), 2.1 + Math.abs(i) * -0.2, i * 1.4);
     return;
   }
-  if (r < 0.62 + diff * 0.2) {
-    // one blocked lane, shard bait in another
-    const block = rand3();
-    spawn('barrier', block);
-    const safe = otherLane(block);
-    spawnShard(safe, 1.0, 0);
+  if (r < breather + hurdleW + doubleW) {
+    // two blocked lanes (harder) — always leaves one open path
+    const open = rand3();
+    for (let l = 0; l < 3; l++) if (l !== open) spawn('barrier', l);
+    spawnShard(open, 1.0, 0);
     return;
   }
-  // two blocked lanes (harder) — always leaves one open path
-  const open = rand3();
-  for (let l = 0; l < 3; l++) if (l !== open) spawn('barrier', l);
-  spawnShard(open, 1.0, 0);
+  // one blocked lane, shard bait in another
+  const block = rand3();
+  spawn('barrier', block);
+  spawnShard(otherLane(block), 1.0, 0);
 }
 function spawnShard(lane, y, dz) {
   const o = spawn('shard', lane, y);
@@ -449,8 +452,12 @@ function update(dt) {
     const bi = Math.floor(g.distance / BIOME_EVERY);
     if (bi !== g.biomeIdx) { g.biomeIdx = bi; setBiomeTarget(bi); }
 
-    // spawn director keeps constant spacing regardless of speed
-    const rowGap = Math.max(5.0, 9 - Math.min(3, g.distance / 900));
+    // Space rows by TIME, not fixed distance, so the reaction window is what we
+    // actually control (rising speed won't secretly compress the timing). Wide
+    // gaps early to ease the player in; tighten as difficulty ramps.
+    const diff = Math.min(1, g.distance / 2000);
+    const interval = Math.max(0.42, 0.95 - diff * 0.5);   // seconds between rows: 0.95 -> 0.45
+    const rowGap = g.speed * interval;
     distSinceRow += speed * dt;
     while (distSinceRow >= rowGap) { distSinceRow -= rowGap; spawnRow(g.distance); }
 
