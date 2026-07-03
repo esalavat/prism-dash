@@ -107,7 +107,7 @@ const scene = new THREE.Scene();
 const biome = { fog: new THREE.Color(BIOMES[0].fog), floor: new THREE.Color(BIOMES[0].floor),
                 accent: new THREE.Color(BIOMES[0].accent), rail: new THREE.Color(BIOMES[0].rail),
                 light: new THREE.Color(BIOMES[0].light) };
-scene.fog = new THREE.FogExp2(biome.fog.getHex(), 0.0125);
+scene.fog = new THREE.FogExp2(biome.fog.getHex(), 0.009);
 scene.background = biome.fog.clone();
 
 const camera = new THREE.PerspectiveCamera(66, 1, 0.1, 400);
