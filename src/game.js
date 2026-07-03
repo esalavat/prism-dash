@@ -132,7 +132,9 @@ function buildComposer() {
   try {
     composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), isMobile ? 0.75 : 0.95, 0.55, 0.18);
+    // strength, radius, threshold — tighter + higher threshold so only the
+    // brightest highlights bloom (keeps neon punch without washing out shapes)
+    bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), isMobile ? 0.5 : 0.62, 0.4, 0.32);
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
   } catch (e) {
@@ -145,8 +147,8 @@ buildComposer();
 // ------------------------------------------------------------------ materials
 const floorMat = new THREE.MeshStandardMaterial({ color: biome.floor, roughness: 0.9, metalness: 0.1 });
 const railMat = new THREE.MeshStandardMaterial({ color: 0x0a0a20, emissive: biome.rail, emissiveIntensity: 2.2, roughness: 0.4 });
-const barrierMat = new THREE.MeshStandardMaterial({ color: 0x111122, emissive: biome.accent, emissiveIntensity: 1.6, roughness: 0.5, metalness: 0.2 });
-const hurdleMat = new THREE.MeshStandardMaterial({ color: 0x111122, emissive: biome.rail, emissiveIntensity: 1.6, roughness: 0.5 });
+const barrierMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, emissive: biome.accent, emissiveIntensity: 1.05, roughness: 0.5, metalness: 0.2 });
+const hurdleMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, emissive: biome.rail, emissiveIntensity: 1.15, roughness: 0.5 });
 const shardMat = new THREE.MeshStandardMaterial({ color: 0xfff2b0, emissive: 0xffcf2b, emissiveIntensity: 2.2, roughness: 0.3 });
 const rungMat = new THREE.MeshStandardMaterial({ color: 0x0a0a20, emissive: biome.rail, emissiveIntensity: 1.3, roughness: 0.5 });
 const pylonMat = new THREE.MeshStandardMaterial({ color: 0x0c0c22, emissive: biome.accent, emissiveIntensity: 0.9, roughness: 0.6 });
